@@ -1,0 +1,266 @@
+<robot name="model1">
+    <link name="axis">
+    <visual>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+        <cylinder radius="0.01" length=".5" />
+      </geometry>
+      <material name="gray">
+        <color rgba=".2 .2 .2 1" />
+      </material>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="1.57 0 0" />
+      <geometry>
+        <cylinder radius="0.01" length=".5" />
+      </geometry>
+      <contact_coefficients mu="0" kp="1000.0" kd="1.0"/>
+    </collision>
+  </link>
+
+    <link name="base_link">
+      <visual>
+        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+        <geometry>
+          <mesh filename="file:///home/olin/Robotics/workshop/src/model1/urdf/model1-base.stl"/>
+        </geometry>
+      </visual>
+      <collision>
+      <origin xyz="0 0 0.051"/>
+      <geometry>
+        <box size="0.18 0.2 0.07" />
+      </geometry>
+    </collision>
+    <inertial>
+    <mass value="0.773"/>
+    <inertia ixx=".001" ixy="0.0" ixz="0.0" iyy=".001" iyz="0.0" izz=".002"/>
+  </inertial>
+    </link>
+    
+    <joint name="base_to_axis" type="fixed">
+        <parent link="axis"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+    </joint>
+    
+    <link name="br_wheel">
+      <visual>
+        <origin rpy="1.57075 0 0" xyz="0.000 0.000 0"/>
+        <geometry>
+          <mesh filename="file:///home/olin/Robotics/workshop/src/model1/urdf/wheel.stl"/>
+        </geometry>
+      </visual>
+      <inertial>
+    <mass value="0.002"/>
+    <inertia 
+        ixx="4e-8" ixy="0.0" ixz="0.0"
+        iyy="4e-8" iyz="0.0"
+        izz="8e-8"/>
+</inertial>
+    </link>
+    <joint name="base_to_br" type="continuous">
+    <parent link="base_link"/>
+    <child link="br_wheel"/>
+    <origin xyz=".052 .11 .033"/>
+        <axis xyz="0 1 0"/>
+  </joint>
+  
+  <link name="bl_wheel">
+      <visual>
+        <origin rpy="-1.57075 0 0" xyz="0.000 0.000 0"/>
+        <geometry>
+          <mesh filename="file:///home/olin/Robotics/workshop/src/model1/urdf/wheel.stl"/>
+        </geometry>
+      </visual>
+      <inertial>
+    <mass value="0.002"/>
+    <inertia 
+        ixx="4e-8" ixy="0.0" ixz="0.0"
+        iyy="4e-8" iyz="0.0"
+        izz="8e-8"/>
+</inertial>
+    </link>
+    <joint name="base_to_bl" type="continuous">
+    <parent link="base_link"/>
+    <child link="bl_wheel"/>
+    <origin xyz=".052 -0.11 .033"/>
+        <axis xyz="0 1 0"/>
+  </joint>
+  
+  <link name="fl_wheel">
+      <visual>
+        <origin rpy="-1.57075 0 0" xyz="0.000 0.000 0"/>
+        <geometry>
+          <mesh filename="file:///home/olin/Robotics/workshop/src/model1/urdf/wheel.stl"/>
+        </geometry>
+      </visual>
+      <inertial>
+    <mass value="0.002"/>
+    <inertia 
+        ixx="4e-8" ixy="0.0" ixz="0.0"
+        iyy="4e-8" iyz="0.0"
+        izz="8e-8"/>
+</inertial>
+    </link>
+    <joint name="base_to_fl" type="continuous">
+    <parent link="base_link"/>
+    <child link="fl_wheel"/>
+    <origin xyz="-0.06 -0.1 .033"/>
+        <axis xyz="0 1 0"/>
+  </joint>
+  
+  <link name="fr_wheel">
+      <visual>
+        <origin rpy="-1.57075 0 0" xyz="0.000 0.000 0"/>
+        <geometry>
+          <mesh filename="file:///home/olin/Robotics/workshop/src/model1/urdf/wheel.stl"/>
+        </geometry>
+      </visual>
+      <inertial>
+    <mass value="0.002"/>
+    <inertia 
+        ixx="4e-8" ixy="0.0" ixz="0.0"
+        iyy="4e-8" iyz="0.0"
+        izz="8e-8"/>
+</inertial>
+    </link>
+    <joint name="base_to_fr" type="continuous">
+    <parent link="base_link"/>
+    <child link="fr_wheel"/>
+    <origin xyz="-0.06 0.1 .033"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  
+  
+    <ros2_control name="br_sensor" type="sensor">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotSensorPositionFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">1.0</param>
+        <param name="example_param_hw_stop_duration_sec">2.0</param>
+        <param name="example_param_hw_slowdown">50.0</param>
+        <param name="example_param_socket_port">23286</param>
+      </hardware>
+      <joint name="base_to_br">
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+    <ros2_control name="bl_sensor" type="sensor">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotSensorPositionFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">1.0</param>
+        <param name="example_param_hw_stop_duration_sec">2.0</param>
+        <param name="example_param_hw_slowdown">50.0</param>
+        <param name="example_param_socket_port">23287</param>
+      </hardware>
+      <joint name="base_to_bl">
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+    <ros2_control name="fr_sensor" type="sensor">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotSensorPositionFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">1.0</param>
+        <param name="example_param_hw_stop_duration_sec">2.0</param>
+        <param name="example_param_hw_slowdown">50.0</param>
+        <param name="example_param_socket_port">23288</param>
+      </hardware>
+      <joint name="base_to_fr">
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+    <ros2_control name="fl_sensor" type="sensor">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotSensorPositionFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">1.0</param>
+        <param name="example_param_hw_stop_duration_sec">2.0</param>
+        <param name="example_param_hw_slowdown">50.0</param>
+        <param name="example_param_socket_port">23289</param>
+      </hardware>
+      <joint name="base_to_fl">
+        <state_interface name="position"/>
+      </joint>
+    </ros2_control>
+  
+    <ros2_control name="br" type="actuator">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotActuatorWithoutFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_socket_port">23286</param>
+      </hardware>
+      <joint name="base_to_br">
+        <command_interface name="velocity">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+      </joint>
+    </ros2_control>
+    
+    <ros2_control name="bl" type="actuator">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotActuatorWithoutFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_socket_port">23287</param>
+      </hardware>
+      <joint name="base_to_bl">
+        <command_interface name="velocity">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+      </joint>
+    </ros2_control>
+    
+    <ros2_control name="fr" type="actuator">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotActuatorWithoutFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_socket_port">23288</param>
+      </hardware>
+      <joint name="base_to_fr">
+        <command_interface name="velocity">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+      </joint>
+    </ros2_control>
+    
+    <ros2_control name="fl" type="actuator">
+      <hardware>
+        <plugin>ros2_control_demo_example_14/RRBotActuatorWithoutFeedback</plugin>
+        <param name="example_param_hw_start_duration_sec">2.0</param>
+        <param name="example_param_hw_stop_duration_sec">3.0</param>
+        <param name="example_param_socket_port">23289</param>
+      </hardware>
+      <joint name="base_to_fl">
+        <command_interface name="velocity">
+          <param name="min">-1</param>
+          <param name="max">1</param>
+        </command_interface>
+      </joint>
+    </ros2_control>
+  
+</robot>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
